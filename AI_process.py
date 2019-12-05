@@ -26,15 +26,17 @@ def AI_process_get_predict_result(filelist, model_name):
         return None
 
     if model_name == "MRCNN_Brachy":
-        return MRCNN_Brachy_AI_process(filelist)
+        ret = MRCNN_Brachy_AI_process(filelist)
+        return ret
     elif model_name == "MRCNN_Breast":
-        return MRCNN_Breast_AI_process(filelist)
+        ret = MRCNN_Breast_AI_process(filelist)
+        return ret
     else:
         return None
 def MRCNN_Breast_AI_process(filelist):
     #TODO
     def get_dataset():
-        import
+        import Mult_Class_Breast
         dataset = Mult_Class_Breast.NeckDataset()
         CLASS_DIR = os.path.join("datasets_dicom")
         dataset.load_Neck(CLASS_DIR, "val")
@@ -42,9 +44,42 @@ def MRCNN_Breast_AI_process(filelist):
         # print(dataset)
         return dataset
     def get_model():
-        pass
-        return None
-    return None
+        # Root directory of the project
+        ROOT_DIR = os.path.abspath(".")
+
+        # Import Mask RCNN
+        sys.path.append(ROOT_DIR)  # To find local version of the library
+        MODEL_DIR = os.path.join(ROOT_DIR, "logs")
+        DEVICE = "/gpu:0"
+        #MASKRCNN_MODEL_WEIGHT_FILEPATH = r"../ModelsAndRSTemplates/Brachy/MaskRCNN_ModelWeight/mask_rcnn_neck_0082.h5"
+        MASKRCNN_MODEL_WEIGHT_FILEPATH = r"./ModelsAndRSTemplates/Breast/MaskRCNN_ModelWeight/mask_rcnn_neck_0020.h5"
+        import tensorflow as tf
+        import Mult_Class_Breast
+        import mrcnn.model as modellib
+        config = Mult_Class_Breast.NeckConfig()
+        class InferenceConfig(config.__class__):
+            # Run detection on one image at a time
+            GPU_COUNT = 1
+            IMAGES_PER_GPU = 1
+        config = InferenceConfig()
+        # Create model in inference mode
+        with tf.device(DEVICE):
+            model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
+        weights_path = MASKRCNN_MODEL_WEIGHT_FILEPATH
+        # Load weights
+        print('model.load_weight start')
+        model.load_weights(weights_path, by_name=True)
+        print('model.load_weight end')
+        # Test
+        model.detect([np.zeros([512, 512, 3])])
+        return model
+    dataset = get_dataset()
+    model = get_model()
+    print('get_model() done')
+    label_id_mask = get_label_id_mask(dataset, model, filelist)
+    return label_id_mask
+
+
 def MRCNN_Brachy_AI_process(filelist):
     print("MRCNN_Brachy_AI_process is calling with filelist = {}".format(filelist) )
     def get_dataset():
@@ -105,36 +140,17 @@ def MRCNN_Brachy_AI_process(filelist):
         #MASKRCNN_MODEL_WEIGHT_FILEPATH = r"../ModelsAndRSTemplates/Brachy/MaskRCNN_ModelWeight/mask_rcnn_neck_0082.h5"
         MASKRCNN_MODEL_WEIGHT_FILEPATH = r"./ModelsAndRSTemplates/Brachy/MaskRCNN_ModelWeight/mask_rcnn_neck_0082.h5"
         import tensorflow as tf
-        # changed by milochen
-        # import Mult_Class
         import Mult_Class_Brachy
         import mrcnn.model as modellib
-        # 讀取檔案的資料夾
-        # changed by milochen
-        # config = Mult_Class.NeckConfig()
-        # config = Mult_Class_Brachy.NeckConfig()
         config = Mult_Class_Brachy.NeckConfig()
-
-        # Override the training configurations with a few
-        # changes for inferencing.
-        # 對GPU的設計
         class InferenceConfig(config.__class__):
             # Run detection on one image at a time
             GPU_COUNT = 1
             IMAGES_PER_GPU = 1
-
         config = InferenceConfig()
-
         # Create model in inference mode
-        # changed by milochen by Sac's suggestion
-        # with tf.device(DEVICE):
-        #    model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
         with tf.device(DEVICE):
             model = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=config)
-
-        # Or, load the last model you trained
-        # weights_path = model.find_last()
-        # weights_path = r"D:\WatchFolder\mask_rcnn_neck_K8s_0030.h5"
         weights_path = MASKRCNN_MODEL_WEIGHT_FILEPATH
         # Load weights
         print('model.load_weight start')
@@ -144,7 +160,7 @@ def MRCNN_Brachy_AI_process(filelist):
         model.detect([np.zeros([512, 512, 3])])
         return model
     dataset = get_dataset()
-    print("dataset = {}".format(dataset))
+    #print("dataset = {}".format(dataset))
 
     model = get_model()
     label_id_mask = get_label_id_mask(dataset, model, filelist)

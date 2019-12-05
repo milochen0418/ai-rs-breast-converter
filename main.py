@@ -32,12 +32,15 @@ def generate_rs_by_ct_folder(input_ct_folder, output_rs_filepath, model_name):
     # mrcnn_out = ai.AI_process_by_folder(ct_folder, model_name)
     #mrcnn_out = ai.AI_process(ct_filelist, model_name)
     mrcnn_out = AI_process_get_predict_result(ct_filelist, model_name)
+
+    print('EARLY exit(1) in generate_rs_by_ct_folder()')
+    exit(1)
     log_current_time("AI_process", "STOP")
     #print(mrcnn_out)
 
     log_current_time("InterpolateWrapper_process", "START")
     #sirw.interpolate_and_wrapup_rs(mrcnn_out, ct_filelist, "RS.output.dcm")
-    interpolate_and_wrapup_rs(mrcnn_out, ct_filelist, output_rs_filepath)
+    interpolate_and_wrapup_rs(mrcnn_out, ct_filelist, output_rs_filepath, model_name)
     #os.path.join(temp_folder, r'RS.output.dcm')
     log_current_time("InterpolateWrapper_process", "STOP")
 def generate_rp_by_ct_rs_folder(input_ct_rs_folder, output_rp_filepath):
@@ -122,12 +125,11 @@ def dev_test_code_running():
         model_name = "MRCNN_Brachy"
         input_folder = "TestCase_Input_CtFolder"
         output_folder = "OutputFolder"
-
         generate_rs_by_ct_folder(
             input_ct_folder=input_folder,
             output_rs_filepath=os.path.join(input_folder, r'RS.output.dcm'),
-            model_name="MRCNN_Brachy")
-
+            model_name="MRCNN_Breast")
+    example_of_gen_breast_rs()
     def example_of_gen_brachy_rs():
         model_name = "MRCNN_Brachy"
         input_folder = "TestCase_Input_CtFolder"
@@ -151,7 +153,7 @@ def dev_test_code_running():
             input_ct_folder=input_folder,
             output_rs_rp_folder=output_folder,
             model_name="MRCNN_Brachy")
-    example_of_gen_rs_rp()
+    #example_of_gen_rs_rp()
 
     pass
 

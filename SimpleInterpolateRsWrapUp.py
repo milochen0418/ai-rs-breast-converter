@@ -82,8 +82,14 @@ def find_nearest(array, value):
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     return array[idx]
-def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_filepath_after_ai):
-    RS_TEMPLATE_FILEPATH = r"../ModelsAndRSTemplates/Brachy/RS_Template/RS.1.2.246.352.71.4.417454940236.267194.20190411111011.dcm"
+def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_filepath_after_ai, model_name ):
+    if model_name == "MRCNN_Brachy":
+        RS_TEMPLATE_FILEPATH = r"./ModelsAndRSTemplates/Brachy/RS_Template/RS.1.2.246.352.71.4.417454940236.267194.20190411111011.dcm"
+    elif model_name == "MRCNN_Breast":
+        RS_TEMPLATE_FILEPATH = r"./ModelsAndRSTemplates/Breast/RS_Template/RS.1.2.246.352.71.4.417454940236.244247.20190418132000.dcm"
+    
+
+    # RS.1.2.246.352.71.4.417454940236.267194.20190411111011.dcm
     print("call interpolate_and_wrapup_rs()")
     print("with arg input_ct_filelist = {}", input_ct_filelist)
     print("with arg output_rs_filepath_after_ai = {}", output_rs_filepath_after_ai)
