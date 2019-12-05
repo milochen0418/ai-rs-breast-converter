@@ -163,9 +163,13 @@ def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_file
         colors.append(matchedROIDisplayColor)
 
     # Make color mapping
+    print('Make color mapping')
     colorMapping = {}
     for idx in range(len(labels)):
-        colorMapping[ labels[idx] ] = colors[idx]
+        lblName = labels[idx]
+        lblName_ignore_RS_Head = lblName.split('RS_')[-1]
+        #colorMapping[ labels[idx] ] = colors[idx]
+        colorMapping[lblName_ignore_RS_Head] = colors[idx]
         print(labels[idx], "->", colors[idx])
 
     print("colorMapping Research")
@@ -241,7 +245,10 @@ def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_file
         # Draw color
         lblName = labels[i]
         if lblName in colorMapping:
-            drawColor = colorMapping[lblName]
+            lblName_ignore_RS_Head = lblName.split('RS_')[-1]
+            drawColor = colorMapping[lblName_ignore_RS_Head]
+            #drawColor = colorMapping[lblName]
+            #drawColor = colorMapping[lblName]
             if drawColor == None:
                 #dsss[0x3006, 0x002a] = DataElement(0x3006002a, 'IS', [0, 0, 0]) # ROI Display Color
                 the_color = [255, 255, 0]

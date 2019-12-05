@@ -6,7 +6,7 @@ def log_current_time(tag_str, status):
     now = datetime.datetime.now()
     nowtime_str = now.strftime(timefmt)
     print("[{}/{}] = {}".format( tag_str, status,  nowtime_str ))
-def generate_rs_by_ct_folder(input_ct_folder, output_rs_filepath, model_name):
+def generate_rs_by_ct_folder(input_ct_folder, output_rs_filepath, model_name, is_recreate_ai_bytes = True, bytes_filepath="mrcnn_output.bytes"):
     """
     Generate RS file by the folder that include CT files
     :param input_ct_folder:
@@ -16,6 +16,8 @@ def generate_rs_by_ct_folder(input_ct_folder, output_rs_filepath, model_name):
     """
     from SimpleInterpolateRsWrapUp import interpolate_and_wrapup_rs
     from AI_process import AI_process_get_predict_result
+    from utilities import python_object_dump
+    from utilities import python_object_load
     import pydicom
     ct_folder = input_ct_folder
     ct_filelist = []
@@ -31,7 +33,19 @@ def generate_rs_by_ct_folder(input_ct_folder, output_rs_filepath, model_name):
     log_current_time("AI_process", "START")
     # mrcnn_out = ai.AI_process_by_folder(ct_folder, model_name)
     #mrcnn_out = ai.AI_process(ct_filelist, model_name)
-    mrcnn_out = AI_process_get_predict_result(ct_filelist, model_name)
+    mrcnn_out = None
+    bytes_file_exists = os.path.exists(bytes_filepath)
+    if bytes_file_exists == False:
+        mrcnn_out = AI_process_get_predict_result(ct_filelist, model_name)
+        python_object_dump(mrcnn_out, bytes_filepath)
+    else: # case bytes_file_exists == True
+        if is_recreate_ai_bytes == True:
+            mrcnn_out = AI_process_get_predict_result(ct_filelist, model_name)
+            python_object_dump(mrcnn_out, bytes_filepath)
+        else: # Case is_create_ai_byte == False and bytes_file_exists == True
+            mrcnn_out = python_object_load(bytes_filepath)
+
+        #mrcnn_out = AI_process_get_predict_result(ct_filelist, model_name)
 
     #print('EARLY exit(1) in generate_rs_by_ct_folder()')
     #exit(1)
@@ -128,7 +142,9 @@ def dev_test_code_running():
         generate_rs_by_ct_folder(
             input_ct_folder=input_folder,
             output_rs_filepath=os.path.join(input_folder, r'RS.output.dcm'),
-            model_name=model_name)
+            model_name=model_name,
+            is_recreate_ai_bytes = False
+        )
     example_of_gen_breast_rs()
     def example_of_gen_brachy_rs():
         model_name = "MRCNN_Brachy"
