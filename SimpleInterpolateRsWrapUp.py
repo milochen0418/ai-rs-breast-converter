@@ -243,7 +243,8 @@ def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_file
         ds = Dataset()
         ds[0x3006, 0x0022] = DataElement(0x30060022, 'IS', str(i + 1)) # ROI Number
         ds[0x3006, 0x0024] = DataElement(0x30060024, 'UI', ct_FrameOfReferenceUID) # Referenced Frame of Reference UID
-        ds[0x3006, 0x0026] = DataElement(0x30060026, 'LO', labels[i]) # ROI Name
+        #ds[0x3006, 0x0026] = DataElement(0x30060026, 'LO', labels[i]) # ROI Name
+        ds[0x3006, 0x0026] = DataElement(0x30060026, 'LO', labels[i].split('RS_')[-1])  # ROI Name. if there is RS_ in head, then cut it off
         ds[0x3006, 0x0036] = DataElement(0x30060036, 'CS', 'MANUAL') # ROI Generation Algorithm
         rs_fp.StructureSetROISequence.append(ds)
 
