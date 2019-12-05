@@ -84,42 +84,12 @@ def MRCNN_Brachy_AI_process(filelist):
     print("MRCNN_Brachy_AI_process is calling with filelist = {}".format(filelist) )
     def get_dataset():
         import Mult_Class_Brachy
-        # The way that we use dataset is because
-        # We want to use the mapping table dataset.class_names[ci] to convert id into class name.
-        # for example
-
-        #    self.add_class("Neck", 23, "GTV-N")
-        #    self.add_class("Neck", 24, "CTV-L")
-        #    self.add_class("Neck", 25, "R't_kidney")
-        #    self.add_class("Neck", 26, "L't_kidney")
-        #    self.add_class("Neck", 27, "GTV-T")
-        #    We can get "GTV-T" class string by dataset.class_names[27]
-
-        # changed by milochen
-        # import Mult_Class_Brachy as maskrcnn
-        '''
-        if "" != "":
-            import Mult_Class as maskrcnn
-        else:
-            import Mult_Class_Brachy as maskrcnn
-        '''
-
-        # Load validation dataset
-        # changed by milochen
-        # dataset = Mult_Class.NeckDataset()
         dataset = Mult_Class_Brachy.NeckDataset()
-        # dataset = maskrcnn.NeckDataset()
-
         CLASS_DIR = os.path.join("datasets_dicom")
         dataset.load_Neck(CLASS_DIR, "val")
-
-        # Must call before using the dataset
         dataset.prepare()
-        # print("print dateset")
-        # print(dataset)
         return dataset
     def get_model():
-        # Root directory of the project
         ROOT_DIR = os.path.abspath(".")
 
         # Import Mask RCNN
