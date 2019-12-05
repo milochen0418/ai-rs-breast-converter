@@ -137,7 +137,7 @@ def dev_test_code_running():
             input_ct_folder=input_folder,
             output_rs_filepath=os.path.join(input_folder, r'RS.output.dcm'),
             model_name=model_name)
-    example_of_gen_brachy_rs()
+    #example_of_gen_brachy_rs()
 
     # example code of how to gen RP from CT RS folder
     def example_of_gen_rp():

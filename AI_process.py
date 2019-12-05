@@ -3,7 +3,7 @@ from decimal import Decimal
 from collections import defaultdict
 from skimage.measure import find_contours
 import numpy as np
-
+import matplotlib.pyplot as plt
 def AI_process_get_predict_result(filelist, model_name):
     """
     Check correctness of CT filelist and dispatch suitable model by model_name
@@ -77,6 +77,8 @@ def MRCNN_Breast_AI_process(filelist):
     model = get_model()
     print('get_model() done')
     label_id_mask = get_label_id_mask(dataset, model, filelist)
+    print('Show label_id_mask')
+
     return label_id_mask
 
 
@@ -130,14 +132,11 @@ def MRCNN_Brachy_AI_process(filelist):
         model.detect([np.zeros([512, 512, 3])])
         return model
     dataset = get_dataset()
-    #print("dataset = {}".format(dataset))
-
     model = get_model()
     label_id_mask = get_label_id_mask(dataset, model, filelist)
     return label_id_mask
 def get_label_id_mask(dataset, model, ct_filelist):
     """
-
     :param dataset:
     :param model:
     :param ct_filelist:
@@ -168,20 +167,38 @@ def get_label_id_mask(dataset, model, ct_filelist):
 
     print("get_label_id_mask is calling")
     label_id_mask = defaultdict(dict)
-    for filepath in ct_filelist:
+    for idx,filepath in enumerate(ct_filelist):
         # filepath is a absolute filepath for some ct file
         print(filepath)
 
         ct_fp = pydicom.read_file(filepath)
-        image = ct_fp.pixel_array
+        #image = ct_fp.pixel_array
+        # Only Case for Breast right now, (but not Brachy)
+        rescale_slope = ct_fp.RescaleSlope
+        rescale_intercept = ct_fp.RescaleIntercept
+        image = ct_fp.pixel_array * rescale_slope + rescale_intercept
+
+
         tmp_image = np.zeros([512, 512, 3])
         for ii in range(512):
             for jj in range(512):
                 for kk in range(3):
                     tmp_image[ii][jj][kk] = image[ii][jj]
         image = tmp_image
+        print('image.dtype = {}'.format(image.dtype))
+        print('image.shape = {}'.format(image.shape))
+        #plt.imshow(image[:,:,0])
+        #plt.show()
+
+
+
         results = model.detect([image])
+
+
+        print('OUTPUT of model.detect() idx={}'.format(idx))
         r = results[0]
+        print("results[0] = {}".format(results[0]))
+
         mask = to_json(r['class_ids'], r['masks'], dataset)
 
         x_spacing, y_spacing = float(ct_fp.PixelSpacing[0]), float(ct_fp.PixelSpacing[1])
