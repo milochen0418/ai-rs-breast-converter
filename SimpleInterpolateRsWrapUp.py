@@ -244,7 +244,12 @@ def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_file
             drawColor = colorMapping[lblName]
             if drawColor == None:
                 #dsss[0x3006, 0x002a] = DataElement(0x3006002a, 'IS', [0, 0, 0]) # ROI Display Color
-                dsss[0x3006, 0x002a] = DataElement(0x3006002a, 'IS', [255, 255, 0])  # ROI Display Color
+                the_color = [255, 255, 0]
+                if lblName == "RS_PTV":
+                    the_color = [255,0, 0] # Red
+                elif lblName == "RS_CTV":
+                    the_color = [0, 255, 0] # Green
+                dsss[0x3006, 0x002a] = DataElement(0x3006002a, 'IS', the_color)  # ROI Display Color
             else:
                 dsss[0x3006, 0x002a] = DataElement(0x3006002a, 'IS', drawColor) # ROI Display Color
         else :
