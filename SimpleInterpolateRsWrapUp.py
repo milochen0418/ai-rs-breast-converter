@@ -128,9 +128,10 @@ def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_file
     # ['bowel', 'Uterus', 'HR-CTV', 'Sigmoid_colon', 'Rectum', 'Bladder', 'Foley']
     #
     # [None, ['255', '255', '128'], ['0', '255', '0'], ['187', '255', '187'], ['128', '64', '64'], ['0', '255', '255'],['0', '150', '0'] ]
+
     for lbl_idx in range(len(labels)):
         lblName = labels[lbl_idx]
-
+        lblName = lblName.split('RS_')[-1]
         # Find the ROI Number that its ROIName equal to label name lblName
         isFindMatchedROINumber = False
         matchedROINumber = None
@@ -149,28 +150,39 @@ def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_file
         # Find the ROI Display Color that its matchedROINumber equal to ReferencedROINumber
         isFindMatchedROIDisplayColor = False
         matchedROIDisplayColor = None
-        for idx in range(len(rs_fp.ROIContourSequence)):
-            item = rs_fp.ROIContourSequence[idx]
+        #for idx in range(len(rs_fp.ROIContourSequence)):
+        #    item = rs_fp.ROIContourSequence[idx]
+        for idx, item in enumerate(rs_fp.ROIContourSequence):
             if item.ReferencedROINumber == matchedROINumber:
                 isFindMatchedROIDisplayColor = True
                 matchedROIDisplayColor = item.ROIDisplayColor
                 break
+        if isFindMatchedROIDisplayColor == True:
+            print('find color work and color = {}'.format(matchedROIDisplayColor))
+        else:
+            print('color is not found')
 
         if isFindMatchedROIDisplayColor == False:
             print("isFindMatchedROIDisplayColor is False when labels[", lbl_idx, "] = ", lblName)
             colors.append(None)
             continue
         colors.append(matchedROIDisplayColor)
+    print('show colors')
+    for idx, color in enumerate(colors):
+        print('idx={} -> {}'.format(idx, color))
 
     # Make color mapping
     print('Make color mapping')
     colorMapping = {}
     for idx in range(len(labels)):
         lblName = labels[idx]
-        lblName_ignore_RS_Head = lblName.split('RS_')[-1]
+        lblName = lblName.split('RS_')[-1] # cut off RS_ head if there is
+
         #colorMapping[ labels[idx] ] = colors[idx]
-        colorMapping[lblName_ignore_RS_Head] = colors[idx]
-        print(labels[idx], "->", colors[idx])
+        #colorMapping[lblName_ignore_RS_Head] = colors[idx]
+        colorMapping[lblName] = colors[idx]
+        #print(labels[idx], "->", colors[idx])
+        print(lblName, "->", colors[idx])
 
     print("colorMapping Research")
     print(labels)
@@ -244,9 +256,10 @@ def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_file
         # dsss[0x3006, 0x002a] = DataElement(0x3006002a, 'IS', color)
         # Draw color
         lblName = labels[i]
-        if lblName in colorMapping:
+        if lblName.split('RS_')[-1] in colorMapping.keys():
             lblName_ignore_RS_Head = lblName.split('RS_')[-1]
             drawColor = colorMapping[lblName_ignore_RS_Head]
+            print('drawColor = {}'.format(drawColor))
             #drawColor = colorMapping[lblName]
             #drawColor = colorMapping[lblName]
             if drawColor == None:
