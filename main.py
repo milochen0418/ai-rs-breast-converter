@@ -123,7 +123,7 @@ def generate_rs_rp_by_ct_folder(input_ct_folder, output_rs_rp_folder, model_name
 def dev_test_code_running():
     # example code of how to gen RS from CT folder
     def example_of_gen_breast_rs():
-        model_name = "MRCNN_Brachy"
+        model_name = "MRCNN_Breast"
         input_folder = "TestCase_Breast_Input_CtFolder"
         generate_rs_by_ct_folder(
             input_ct_folder=input_folder,
@@ -137,7 +137,7 @@ def dev_test_code_running():
             input_ct_folder=input_folder,
             output_rs_filepath=os.path.join(input_folder, r'RS.output.dcm'),
             model_name=model_name)
-    #example_of_gen_brachy_rs()
+    example_of_gen_brachy_rs()
 
     # example code of how to gen RP from CT RS folder
     def example_of_gen_rp():
