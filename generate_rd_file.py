@@ -710,7 +710,10 @@ def wrap_prediction_rd_file(rd_template_filepath, ai_output_pyobj, rd_output_fil
     rd_tmp_fp.PatientBirthDate = ct_fp.PatientBirthDate
     rd_tmp_fp.PatientBirthTime = ct_fp.PatientBirthTime
     rd_tmp_fp.PatientSex = ct_fp.PatientSex
-    rd_tmp_fp.PhysiciansOfRecord = ct_fp.PhysiciansOfRecord
+    try:
+        rd_tmp_fp.PhysiciansOfRecord = ct_fp.PhysiciansOfRecord
+    except:
+        pass
 
     now = datetime.datetime.now()
     rd_tmp_fp.SOPInstanceUID = "1.2.246.352.71.7.417454940236.2863736.{}".format(now.strftime("%Y%m%d%H%M%S"))
