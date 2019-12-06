@@ -151,12 +151,53 @@ def generate_rs_rd_by_ct_folder(input_ct_folder, output_rs_rd_folder, model_name
 
 def dev_test_code_running():
 
-    def example_of_gen_breast_rs():
-        patient_number = r"12123"
-        root_folder = r""
-        patient_folder = os.path.join(root_folder,patient_number)
-        ct_folder = os.path.join(patient_folder, r"CT")
-        rs_folder = os.path.join(patient_folder, r"")
+    def example_of_export_from_patient():
+        from shutil import copyfile
+        from utilities import create_directory_if_not_exists
+        import pydicom
+        import os
+        from generate_rd_file import generate_rd_by_ct_rs
+        patient_number = r"26896072"
+
+        root_folder = r"BatchShowCaseFolder"
+        output_root_folder = r"BatchOutput"
+        patient_input_folder = os.path.join(root_folder, patient_number)
+        patient_output_folder = os.path.join(output_root_folder, patient_number)
+
+        create_directory_if_not_exists(patient_output_folder)
+
+        dcm_filelist = []
+        for dirpath, subdirs, files in os.walk(patient_input_folder):
+            for x in files:
+                if x.endswith(".dcm"):
+                    dcm_filelist.append(os.path.join(dirpath, x))
+        ct_filelist = []
+        rs_filepath = None
+        for filepath in dcm_filelist:
+            fp = pydicom.read_file(filepath)
+            if fp.Modality == "CT":
+                ct_filelist.append(filepath)
+                basename = os.path.basename(filepath)
+                copyfile(filepath, os.path.join(patient_output_folder, basename))
+            elif fp.Modality == "RTSTRUCT":
+                rs_filepath = filepath
+                basename = os.path.basename(filepath)
+                copyfile(filepath, os.path.join(patient_output_folder, basename))
+
+        model_name = "MRCNN_Breast"
+        input_folder = "TestCase_Breast_Input_CtFolder"
+        generate_rs_by_ct_folder(
+            input_ct_folder=patient_output_folder,
+            output_rs_filepath=os.path.join(patient_output_folder, r'RS.output.dcm'),
+            model_name=model_name,
+            is_recreate_ai_bytes = True
+        )
+        output_rd_filepath = os.path.join(patient_output_folder, "rd.output.dcm")
+        bytes_filepath = os.path.join(patient_output_folder, "rd.output.bytes")
+        generate_rd_by_ct_rs(rs_filepath, ct_filelist, output_rd_filepath, is_recreate=True, bytes_filepath=bytes_filepath)
+    example_of_export_from_patient()
+
+
     # example code of how to gen RS from CT folder
     def example_of_gen_breast_rs():
         model_name = "MRCNN_Breast"
@@ -167,7 +208,7 @@ def dev_test_code_running():
             model_name=model_name,
             is_recreate_ai_bytes = True
         )
-    example_of_gen_breast_rs()
+    #example_of_gen_breast_rs()
 
     def example_of_gen_breast_rd():
         from generate_rd_file import generate_rd_by_ct_rs
@@ -194,7 +235,7 @@ def dev_test_code_running():
             except:
                 continue
         generate_rd_by_ct_rs(rs_filepath, ct_filelist, output_rd_filepath, is_recreate=True, bytes_filepath=bytes_filepath)
-    example_of_gen_breast_rd()
+    #example_of_gen_breast_rd()
 
 
 
