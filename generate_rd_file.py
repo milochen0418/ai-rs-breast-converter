@@ -525,6 +525,8 @@ def AI_predict_for_rd_pixel_array(rs_filepath, ct_filelist):
         print(np.max(mask100))
         print(np.min(mask100))
         #np.save('GAN_Test_Frankie.npy', mask100)
+        np.save(r"TestCase_Breast_Input_CtFolder/GAN_Test_Frankie.npy", mask100)
+
     except:
 
         raise
@@ -679,8 +681,9 @@ def wrap_prediction_rd_file(rd_template_filepath, ai_output_pyobj, rd_output_fil
     rd_tmp_fp.SeriesDescription = "AI_project"
     rd_tmp_fp.SliceThickness = ct_fp.SliceThickness
     rd_tmp_fp.StudyInstanceUID = ct_fp.StudyInstanceUID
+    #rd_tmp_fp.SeriesInstanceUID = "1.2.826.0.1.3680043.2.200.1276805877.135.65597.2107.{}".format(now.strftime("%Y%m%d%H%M%S"))
     rd_tmp_fp.SeriesInstanceUID = "1.2.826.0.1.3680043.2.200.1276805877.135.65597.2107.{}".format(
-        now.strftime("%Y%m%d%H%M%S"))
+        now.strftime("%S"))
     # template example of SeriesInstnaceUID = 1.2.826.0.1.3680043.2.200.1276805877.135.65597.2107.1
     rd_tmp_fp.StudyID = ct_fp.StudyID
 
