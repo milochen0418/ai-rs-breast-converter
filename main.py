@@ -166,7 +166,15 @@ def dev_test_code_running():
         from generate_rd_file import generate_rd_by_ct_rs
         import pydicom
         rs_filepath = r"./TestCase_Breast_Input_CtFolder/RS.output.dcm"
-        ct_folder_filepath = r"./TestCase_Breast_Input_CtFolder"
+        #ct_folder_filepath = r"./TestCase_Breast_Input_CtFolder"
+
+        #rs_filepath = r"Frankie_Dataset\24120779\C1_20181031\C1Bre4256\Structure\RS.1.2.246.352.71.4.417454940236.250260.20190418131658.dcm"
+        #ct_folder_filepath = r"Frankie_Dataset\24120779\C1_20181031\C1Bre4256\CT"
+
+        ct_folder_filepath = r"./TestCase_Breast_Input_CtFolder/"
+        #ct_folder_filepath = r"PerfectTraining\34171876\C1_20181108\C1Bre4256\CT"
+        #rs_filepath = r"PerfectTraining\34171876\C1_20181108\C1Bre4256\Structure\RS.1.2.246.352.71.4.417454940236.250903.20190418140351.dcm"
+
         bytes_filepath = r"new-mask100.bytes"
         output_rd_filepath = r"./TestCase_Breast_Input_CtFolder/rd.ai.output.dcm"
         ct_filelist = []
