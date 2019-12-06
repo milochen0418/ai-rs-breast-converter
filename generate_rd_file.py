@@ -495,6 +495,41 @@ def AI_predict_for_rd_pixel_array(rs_filepath, ct_filelist):
             # if np.max(mask98) > 80 or np.max(mask98t) > 0:  # or  np.max(mask98t) > 0
             # print('488 FFFF')
             mask98_rgb = np.dstack((mask97, mask98t, mask98))
+
+            fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(20, 10))
+            ax1.get_xaxis().set_visible(False)
+            ax1.get_yaxis().set_visible(False)
+            ax2.get_xaxis().set_visible(False)
+            ax2.get_yaxis().set_visible(False)
+            ax3.get_xaxis().set_visible(False)
+            ax3.get_yaxis().set_visible(False)
+
+            # ax1.title.set_text("Prediction")
+            # ax1.imshow(fake_Aa, cmap='jet')
+            #
+            # ax2.title.set_text("Ground-Truth")
+            # ax2.imshow(img_Ass, cmap='jet')
+            #
+            #
+            # ax3.title.set_text("CT")
+            # ax3.imshow(CT[:,:,0], cmap='bone')
+
+            ax1.title.set_text("CT")
+            #ax1.imshow(CT[:, :, 0])
+            ax1.imshow(mask97, cmap='jet')
+
+            ax2.title.set_text("T")
+            #ax2.imshow(CT[:, :, 1], cmap='jet')
+            ax2.imshow(mask98t, cmap='jet')
+
+            ax3.title.set_text("S")
+            #ax3.imshow(CT[:, :, 2], cmap='jet')
+            ax3.imshow(mask98, cmap='jet')
+
+            #plt.savefig('pred_image/{}/test/{}_{}_{}.png'.format(E, E, test_image_name[:-4], u))
+            plt.savefig('pred_image/{}.png'.format(num))
+            plt.close()
+
             # plt.imshow(mask98_rgb[:,:,2])
             # plt.show()
 
