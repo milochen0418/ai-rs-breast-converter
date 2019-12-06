@@ -269,7 +269,7 @@ class Pix2Pix():
                 # ---------------------
 
                 # Condition on B and generate a translated version
-                fake_A = self.generator.predict(imgs_B)
+                #fake_A = self.generator.predict(imgs_B)
 
                 # Train the discriminators (original images = real / generated = Fake)
                 d_loss_real = self.discriminator.train_on_batch([imgs_A, imgs_B], valid)
@@ -300,32 +300,32 @@ class Pix2Pix():
                 # If at save interval => save generated image samples
                 if batch_i % sample_interval == 0:
                     self.save_model(epoch)
-                    self.sample_images(epoch, batch_i)
+                    #self.sample_images(epoch, batch_i)
 
 
-    def sample_images(self, epoch, batch_i):
-        os.makedirs('images/%s' % self.dataset_name, exist_ok=True)
-        r, c = 3, 3
-
-        imgs_A, imgs_B = self.data_loader.load_data(batch_size=3, is_testing=True)
-        fake_A = self.generator.predict(imgs_B)
-
-        gen_imgs = np.concatenate([imgs_B, fake_A, imgs_A])
-
-        # Rescale images 0 - 1
-        gen_imgs = 0.5 * gen_imgs + 0.5
-
-        titles = ['Condition', 'Generated', 'Original']
-        fig, axs = plt.subplots(r, c)
-        cnt = 0
-        for i in range(r):
-            for j in range(c):
-                axs[i,j].imshow(gen_imgs[cnt])
-                axs[i, j].set_title(titles[i])
-                axs[i,j].axis('off')
-                cnt += 1
-        fig.savefig("images/%s/%d_%d.png" % (self.dataset_name, epoch, batch_i))
-        plt.close()
+    # def sample_images(self, epoch, batch_i):
+    #     os.makedirs('images/%s' % self.dataset_name, exist_ok=True)
+    #     r, c = 3, 3
+    #
+    #     imgs_A, imgs_B = self.data_loader.load_data(batch_size=3, is_testing=True)
+    #     fake_A = self.generator.predict(imgs_B)
+    #
+    #     gen_imgs = np.concatenate([imgs_B, fake_A, imgs_A])
+    #
+    #     # Rescale images 0 - 1
+    #     gen_imgs = 0.5 * gen_imgs + 0.5
+    #
+    #     titles = ['Condition', 'Generated', 'Original']
+    #     fig, axs = plt.subplots(r, c)
+    #     cnt = 0
+    #     for i in range(r):
+    #         for j in range(c):
+    #             axs[i,j].imshow(gen_imgs[cnt])
+    #             axs[i, j].set_title(titles[i])
+    #             axs[i,j].axis('off')
+    #             cnt += 1
+    #     fig.savefig("images/%s/%d_%d.png" % (self.dataset_name, epoch, batch_i))
+    #     plt.close()
 
 
     def pred_image_fake_a(self, imgs_B):
@@ -369,6 +369,10 @@ def AI_predict_for_rd_pixel_array(rs_filepath, ct_filelist):
 
     Structure_list = path + "\\structure.csv"
     target_list = path + "\\target.csv"
+    print("CALL AI_predict_for_rd_pixel_array() start ")
+    print("Structure_list = {}".format(Structure_list))
+    print("target_list = {}".format(target_list))
+
 
     RS = rs_filepath
     dicom_rt_structure = pydicom.dcmread(RS)
@@ -550,6 +554,7 @@ def test_case_AI_predict_for_rd_pixel_array():
     print('pyobj.shape = ', pyobj.shape)
     print('pyobj.dtype = ', pyobj.dtype)
     pass
+
 def get_process_list(root_folder):
     process_list = []
     import os
@@ -571,6 +576,7 @@ def get_process_list(root_folder):
         p_dict['output'] = o_dict
         process_list.append(p_dict)
     return process_list
+
 def test_case_outputAll_AI_predict_for_rd_pixel_array():
     process_list = []
     # each p_dict in process_list has
@@ -780,13 +786,14 @@ def test_case_wrap_prediction_rd_file():
 def generate_rd_by_ct_rs(rs_filepath, ct_filelist, output_rd_filepath, is_recreate=True, bytes_filepath="temp-mask.bytes"):
     rd_template_filepath = r"RD.template.dcm"
     pyobj = AI_predict_for_rd_pixel_array(rs_filepath, ct_filelist)
-    python_object_dump(pyobj, bytes_filepath)
-    ai_output_pyobj = python_object_load(bytes_filepath)
-    wrap_prediction_rd_file(rd_template_filepath, ai_output_pyobj, output_rd_filepath, ct_filelist)
+    #python_object_dump(pyobj, bytes_filepath)
+    #ai_output_pyobj = python_object_load(bytes_filepath)
+    #wrap_prediction_rd_file(rd_template_filepath, ai_output_pyobj, output_rd_filepath, ct_filelist)
+    wrap_prediction_rd_file(rd_template_filepath, pyobj, output_rd_filepath, ct_filelist)
     pass
 def example_of_generate_rd():
-    rs_filepath = r"Frankie_Dataset\25051982\C1_20180827\C1Bre4256\Structure\RS.1.2.246.352.71.4.417454940236.244247.20190418132000.dcm"
-    ct_folder_filepath = r"Frankie_Dataset\25051982\C1_20180827\C1Bre4256\CT"
+    rs_filepath = r"Frankie_Dataset\24120779\C1_20181031\C1Bre4256\Structure\RS.1.2.246.352.71.4.417454940236.250260.20190418131658.dcm"
+    ct_folder_filepath = r"Frankie_Dataset\24120779\C1_20181031\C1Bre4256\CT"
     bytes_filepath = r"new-mask100.bytes"
     output_rd_filepath = r"rd.ai.output.dcm"
     ct_filelist = []
@@ -802,5 +809,5 @@ def example_of_generate_rd():
 
 
 
-
-example_of_generate_rd()
+if __name__ == "__main__":
+    example_of_generate_rd()

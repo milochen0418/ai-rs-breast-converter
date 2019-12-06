@@ -197,7 +197,7 @@ def get_label_id_mask(dataset, model, ct_filelist):
 
         print('OUTPUT of model.detect() idx={}'.format(idx))
         r = results[0]
-        print("results[0] = {}".format(results[0]))
+        #print("results[0] = {}".format(results[0]))
 
         mask = to_json(r['class_ids'], r['masks'], dataset)
 
