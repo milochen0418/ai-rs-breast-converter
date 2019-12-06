@@ -163,14 +163,14 @@ def dev_test_code_running():
         output_root_folder = r"BatchOutput"
         patient_input_folder = os.path.join(root_folder, patient_number)
         patient_output_folder = os.path.join(output_root_folder, patient_number)
-
         create_directory_if_not_exists(patient_output_folder)
-
+        # Make dcm filelist
         dcm_filelist = []
         for dirpath, subdirs, files in os.walk(patient_input_folder):
             for x in files:
                 if x.endswith(".dcm"):
                     dcm_filelist.append(os.path.join(dirpath, x))
+        # Find ct filelist and rs filepath
         ct_filelist = []
         rs_filepath = None
         for filepath in dcm_filelist:
@@ -183,7 +183,7 @@ def dev_test_code_running():
                 rs_filepath = filepath
                 basename = os.path.basename(filepath)
                 copyfile(filepath, os.path.join(patient_output_folder, basename))
-
+        # predict to RS file by CT
         model_name = "MRCNN_Breast"
         input_folder = "TestCase_Breast_Input_CtFolder"
         generate_rs_by_ct_folder(
@@ -194,7 +194,10 @@ def dev_test_code_running():
         )
         output_rd_filepath = os.path.join(patient_output_folder, "rd.output.dcm")
         bytes_filepath = os.path.join(patient_output_folder, "rd.output.bytes")
+
+        # predict to RD file by RS and CT
         generate_rd_by_ct_rs(rs_filepath, ct_filelist, output_rd_filepath, is_recreate=True, bytes_filepath=bytes_filepath)
+        
     example_of_export_from_patient()
 
 
