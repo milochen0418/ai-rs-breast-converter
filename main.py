@@ -135,6 +135,20 @@ def generate_rs_rp_by_ct_folder(input_ct_folder, output_rs_rp_folder, model_name
     print("rs_dst_filepath = {}".format(rs_dst_filepath))
     print("rp_dst_filepath = {}".format(rp_dst_filepath))
 
+
+def generate_rs_rd_by_ct_folder(input_ct_folder, output_rs_rd_folder, model_name):
+    #TODO not done yet
+    model_name = "MRCNN_Breast"
+    #input_folder = "TestCase_Breast_Input_CtFolder"
+    input_folder = input_ct_folder
+    generate_rs_by_ct_folder(
+        input_ct_folder=input_folder,
+        output_rs_filepath=os.path.join(input_folder, r'RS.output.dcm'),
+        model_name=model_name,
+        is_recreate_ai_bytes=True
+    )
+
+
 def dev_test_code_running():
     # example code of how to gen RS from CT folder
     def example_of_gen_breast_rs():
@@ -144,7 +158,7 @@ def dev_test_code_running():
             input_ct_folder=input_folder,
             output_rs_filepath=os.path.join(input_folder, r'RS.output.dcm'),
             model_name=model_name,
-            is_recreate_ai_bytes = False
+            is_recreate_ai_bytes = True
         )
     example_of_gen_breast_rs()
 
