@@ -776,7 +776,6 @@ def test_case_wrap_prediction_rd_file():
 
 def generate_rd_by_ct_rs(rs_filepath, ct_filelist, output_rd_filepath, is_recreate=True, bytes_filepath="temp-mask.bytes"):
     rd_template_filepath = r"RD.template.dcm"
-
     pyobj = AI_predict_for_rd_pixel_array(rs_filepath, ct_filelist)
     python_object_dump(pyobj, bytes_filepath)
     ai_output_pyobj = python_object_load(bytes_filepath)
@@ -797,6 +796,7 @@ def example_of_generate_rd():
         except:
             continue
     generate_rd_by_ct_rs(rs_filepath, ct_filelist, output_rd_filepath, bytes_filepath)
+
 
 
 

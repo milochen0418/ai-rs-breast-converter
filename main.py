@@ -146,15 +146,15 @@ def dev_test_code_running():
             model_name=model_name,
             is_recreate_ai_bytes = False
         )
-    #example_of_gen_breast_rs()
+    example_of_gen_breast_rs()
 
     def example_of_gen_breast_rd():
         from generate_rd_file import generate_rd_by_ct_rs
         import pydicom
-        rs_filepath = r"Frankie_Dataset\25051982\C1_20180827\C1Bre4256\Structure\RS.1.2.246.352.71.4.417454940236.244247.20190418132000.dcm"
-        ct_folder_filepath = r"Frankie_Dataset\25051982\C1_20180827\C1Bre4256\CT"
+        rs_filepath = r"./TestCase_Breast_Input_CtFolder/RS.output.dcm"
+        ct_folder_filepath = r"./TestCase_Breast_Input_CtFolder"
         bytes_filepath = r"new-mask100.bytes"
-        output_rd_filepath = r"rd.ai.output.dcm"
+        output_rd_filepath = r"./TestCase_Breast_Input_CtFolder/rd.ai.output.dcm"
         ct_filelist = []
         for file in os.listdir(ct_folder_filepath):
             filepath = os.path.join(ct_folder_filepath, file)
@@ -164,11 +164,11 @@ def dev_test_code_running():
                     ct_filelist.append(filepath)
             except:
                 continue
-        generate_rd_by_ct_rs(rs_filepath, ct_filelist, output_rd_filepath, bytes_filepath)
+        generate_rd_by_ct_rs(rs_filepath, ct_filelist, output_rd_filepath, is_recreate=True, bytes_filepath=bytes_filepath)
     example_of_gen_breast_rd()
 
 
-    example_of_gen_breast_rd()
+
     def example_of_gen_brachy_rs():
         model_name = "MRCNN_Brachy"
         input_folder = "TestCase_Brachy_Input_CtFolder"
