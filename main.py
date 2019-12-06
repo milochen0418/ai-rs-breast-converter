@@ -150,6 +150,13 @@ def generate_rs_rd_by_ct_folder(input_ct_folder, output_rs_rd_folder, model_name
 
 
 def dev_test_code_running():
+
+    def example_of_gen_breast_rs():
+        patient_number = r"12123"
+        root_folder = r""
+        patient_folder = os.path.join(root_folder,patient_number)
+        ct_folder = os.path.join(patient_folder, r"CT")
+        rs_folder = os.path.join(patient_folder, r"")
     # example code of how to gen RS from CT folder
     def example_of_gen_breast_rs():
         model_name = "MRCNN_Breast"
