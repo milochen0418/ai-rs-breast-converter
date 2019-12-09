@@ -800,6 +800,7 @@ def wrap_to_rp_file(RP_OperatorsName, rs_filepath, tandem_rp_line, out_rp_filepa
 
     rp_fp.FrameOfReferenceUID = rs_fp.ReferencedFrameOfReferenceSequence[0].FrameOfReferenceUID
     rp_fp.ReferencedStructureSetSequence[0].ReferencedSOPClassUID = rs_fp.SOPClassUID
+    rp_fp.RTPlanDate = '20170903'
     rp_fp.ReferencedStructureSetSequence[0].ReferencedSOPInstanceUID = rs_fp.SOPInstanceUID
 
     directAttrSet = [
@@ -824,8 +825,9 @@ def wrap_to_rp_file(RP_OperatorsName, rs_filepath, tandem_rp_line, out_rp_filepa
     newSOPInstanceUID = get_new_uid(old_uid=rp_fp.SOPInstanceUID, study_date=rp_fp.StudyDate)
     rp_fp.SeriesInstanceUID = newSeriesInstanceUID
     rp_fp.SOPInstanceUID = newSOPInstanceUID
-    rp_fp.InstanceCreationDate = rp_fp.RTPlanDate = rp_fp.StudyDate = rs_fp.StudyDate
-    rp_fp.RTPlanTime = str(float(rs_fp.StudyTime) + 0.001)
+
+    #rp_fp.InstanceCreationDate = rp_fp.RTPlanDate = rp_fp.StudyDate = rs_fp.StudyDate
+    #rp_fp.RTPlanTime = str(float(rs_fp.StudyTime) + 0.001)
     rp_fp.InstanceCreationTime = str(float(rs_fp.InstanceCreationTime) + 0.001)
 
     # Clean Dose Reference

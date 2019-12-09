@@ -253,15 +253,15 @@ def dev_test_code_running():
     #example_of_gen_breast_rd()
 
 
-
     def example_of_gen_brachy_rs():
         model_name = "MRCNN_Brachy"
-        input_folder = "TestCase_Brachy_Input_CtFolder"
+        #input_folder = "TestCase_Brachy_Input_CtFolder"
+        input_folder = "TestCase_Brachy_Input_CtFolder_2"
         generate_rs_by_ct_folder(
             input_ct_folder=input_folder,
             output_rs_filepath=os.path.join(input_folder, r'RS.output.dcm'),
             model_name=model_name)
-    example_of_gen_brachy_rs()
+    #example_of_gen_brachy_rs()
 
     # example code of how to gen RP from CT RS folder
     def example_of_gen_rp():
@@ -270,13 +270,16 @@ def dev_test_code_running():
             output_rp_filepath=r"RP.output.dcm")
     # example code of how to gen RS & RP from CT folder
     def example_of_gen_rs_rp():
-        input_folder = r"ShowCase01Test-Input-29059811"
-        output_folder = r"ShowCase01Test-Output-29059811"
+        #input_folder = r"ShowCase01Test-Input-29059811"
+        #output_folder = r"ShowCase01Test-Output-29059811"
+        input_folder = r"DemoBrachyInput"
+        output_folder = r"DemoBrachyOutput"
+
         generate_rs_rp_by_ct_folder(
             input_ct_folder=input_folder,
             output_rs_rp_folder=output_folder,
             model_name="MRCNN_Brachy")
-    #example_of_gen_rs_rp()
+    example_of_gen_rs_rp()
 
 
     pass
