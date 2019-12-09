@@ -93,24 +93,13 @@ def MRCNN_Brachy_AI_process(filelist):
         return dataset
     def get_model():
         ROOT_DIR = os.path.abspath(".")
-
-        # Import Mask RCNN
         sys.path.append(ROOT_DIR)  # To find local version of the library
-
-        # Directory to save logs and trained model
         MODEL_DIR = os.path.join(ROOT_DIR, "logs")
-
-        # config.display()
-        # Device to load the neural network on.
-        # Useful if you're training a model on the same
-        # machine, in which case use CPU and leave the
-        # GPU for training.
-        # DEVICE = "/cpu:0"  # /cpu:0 or /gpu:0
         DEVICE = "/gpu:0"
+        #MASKRCNN_MODEL_WEIGHT_FILEPATH = r"./ModelsAndRSTemplates/Brachy/MaskRCNN_ModelWeight/mask_rcnn_neck_0082.h5"
+        MASKRCNN_MODEL_WEIGHT_FILEPATH = r"./ModelsAndRSTemplates/NewBrachy/MaskRCNN_ModelWeight/mask_rcnn_neck_0015.h5"
 
-        # MASKRCNN_MODEL_WEIGHT_FILEPATH = r"C:/Users/Milo/Desktop/Milo/ModelsAndRSTemplates/Brachy/MaskRCNN_ModelWeight/mask_rcnn_neck_0082.h5"
-        #MASKRCNN_MODEL_WEIGHT_FILEPATH = r"../ModelsAndRSTemplates/Brachy/MaskRCNN_ModelWeight/mask_rcnn_neck_0082.h5"
-        MASKRCNN_MODEL_WEIGHT_FILEPATH = r"./ModelsAndRSTemplates/Brachy/MaskRCNN_ModelWeight/mask_rcnn_neck_0082.h5"
+
         import tensorflow as tf
         import Mult_Class_Brachy
         import mrcnn.model as modellib

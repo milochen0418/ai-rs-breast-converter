@@ -85,7 +85,8 @@ def find_nearest(array, value):
 def interpolate_and_wrapup_rs(input_mrcnn_out, input_ct_filelist, output_rs_filepath_after_ai, model_name ):
     print('Use RS Template for with model_name = {}'.format(model_name))
     if model_name == "MRCNN_Brachy":
-        RS_TEMPLATE_FILEPATH = r"./ModelsAndRSTemplates/Brachy/RS_Template/RS.1.2.246.352.71.4.417454940236.267194.20190411111011.dcm"
+        #RS_TEMPLATE_FILEPATH = r"./ModelsAndRSTemplates/Brachy/RS_Template/RS.1.2.246.352.71.4.417454940236.267194.20190411111011.dcm"
+        RS_TEMPLATE_FILEPATH = r"./ModelsAndRSTemplates/NewBrachy/RS_Template/RS.1.2.246.352.71.4.417454940236.267194.20190411111011.dcm"
     elif model_name == "MRCNN_Breast":
         RS_TEMPLATE_FILEPATH = r"./ModelsAndRSTemplates/Breast/RS_Template/RS.1.2.246.352.71.4.417454940236.244247.20190418132000.dcm"
 

@@ -56,6 +56,8 @@ def generate_rs_by_ct_folder(input_ct_folder, output_rs_filepath, model_name, is
     log_current_time("InterpolateWrapper_process", "START")
     #sirw.interpolate_and_wrapup_rs(mrcnn_out, ct_filelist, "RS.output.dcm")
     interpolate_and_wrapup_rs(mrcnn_out, ct_filelist, output_rs_filepath, model_name)
+
+
     #os.path.join(temp_folder, r'RS.output.dcm')
     log_current_time("InterpolateWrapper_process", "STOP")
 def generate_rp_by_ct_rs_folder(input_ct_rs_folder, output_rp_filepath):
@@ -207,8 +209,8 @@ def dev_test_code_running():
             except:
                 print("[[FAILED]] patient_number = {}".format(patient_number))
                 continue
-
-    example_of_export_from_patient()
+    # This is code for Breast Demo , from CT to RS + RD
+    #example_of_export_from_patient()
 
 
     # example code of how to gen RS from CT folder
@@ -259,7 +261,7 @@ def dev_test_code_running():
             input_ct_folder=input_folder,
             output_rs_filepath=os.path.join(input_folder, r'RS.output.dcm'),
             model_name=model_name)
-    #example_of_gen_brachy_rs()
+    example_of_gen_brachy_rs()
 
     # example code of how to gen RP from CT RS folder
     def example_of_gen_rp():
